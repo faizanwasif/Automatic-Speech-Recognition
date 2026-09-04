@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Parakeet Speech-to-Text Demo</title>
+<title>Speech-to-Text Demo</title>
 <style>
   :root {
     --bg: #0b0d12;
@@ -11,8 +11,8 @@
     --panel-border: #232733;
     --text: #e8eaf0;
     --text-dim: #9aa1b2;
-    --accent: #76b900; /* NVIDIA green */
-    --accent-dim: #5a8f00;
+    --accent: #4f8cff;
+    --accent-dim: #3a6fd9;
     --danger: #ff5c5c;
     --radius: 10px;
   }
@@ -31,18 +31,6 @@
   header { text-align: center; margin-bottom: 32px; max-width: 640px; }
   header h1 { font-size: 1.8rem; margin: 0 0 8px; }
   header p { color: var(--text-dim); margin: 0; line-height: 1.5; }
-  .badge {
-    display: inline-block;
-    background: rgba(118,185,0,0.15);
-    color: var(--accent);
-    border: 1px solid rgba(118,185,0,0.4);
-    padding: 3px 10px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    letter-spacing: 0.02em;
-    margin-bottom: 14px;
-  }
-
   main { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 20px; }
 
   .panel {
@@ -99,7 +87,7 @@
     flex-shrink: 0;
     transition: background 0.15s;
   }
-  .use-btn:hover { background: #8ad100; }
+  .use-btn:hover { background: #6ba0ff; }
   .use-btn:disabled { background: #3a3f4c; color: var(--text-dim); cursor: not-allowed; }
 
   .dropzone {
@@ -111,7 +99,7 @@
     cursor: pointer;
     transition: border-color 0.15s, background 0.15s;
   }
-  .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(118,185,0,0.05); }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(79,140,255,0.05); }
   .dropzone strong { color: var(--text); }
   .dropzone input { display: none; }
 
@@ -126,7 +114,14 @@
   }
   .now-playing.visible { display: flex; }
   .now-playing audio { flex: 1; min-width: 0; }
-  .now-playing .label { font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+  .now-playing .label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+  }
 
   .transcribe-btn {
     width: 100%;
@@ -140,7 +135,7 @@
     cursor: pointer;
     transition: background 0.15s;
   }
-  .transcribe-btn:hover:not(:disabled) { background: #8ad100; }
+  .transcribe-btn:hover:not(:disabled) { background: #6ba0ff; }
   .transcribe-btn:disabled { background: #3a3f4c; color: var(--text-dim); cursor: not-allowed; }
 
   .status-line {
@@ -192,15 +187,13 @@
   }
 
   footer { margin-top: 40px; color: var(--text-dim); font-size: 0.78rem; text-align: center; }
-  footer a { color: var(--accent); text-decoration: none; }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="badge">NVIDIA Parakeet-TDT 0.6B v2</div>
   <h1>Speech-to-Text Demo</h1>
-  <p>Pick a sample below, or upload your own audio. We'll transcribe it using NVIDIA's hosted Parakeet ASR model.</p>
+  <p>Pick a sample below, or upload your own audio, and we'll transcribe it for you.</p>
 </header>
 
 <main>
@@ -244,7 +237,7 @@
 </main>
 
 <footer>
-  Powered by <a href="https://build.nvidia.com/nvidia/parakeet-tdt-0_6b-v2" target="_blank" rel="noopener">NVIDIA Parakeet-TDT 0.6B v2</a> &middot; audio never leaves this session except to be transcribed
+  Your audio is only used to generate this transcript and isn't stored afterward.
 </footer>
 
 <script>
@@ -331,10 +324,23 @@ function setSelection(blob, label) {
   selectedLabel = label;
 }
 
+// Uploaded files can have long, technical, or dataset-style names (e.g.
+// "07282016HFUUforum_SLASH_..._mp3_00255.wav"). Shorten anything unwieldy
+// for display -- keep the extension, truncate the middle -- while the real
+// filename is still what's actually sent to the server.
+function displayName(name, maxLength = 32) {
+  if (name.length <= maxLength) return name;
+  const dotIndex = name.lastIndexOf(".");
+  const ext = dotIndex > 0 ? name.slice(dotIndex) : "";
+  const base = dotIndex > 0 ? name.slice(0, dotIndex) : name;
+  const keep = Math.max(maxLength - ext.length - 1, 8);
+  return base.slice(0, keep) + "…" + ext;
+}
+
 function updateTranscribeButton() {
   if (selectedBlob) {
     transcribeBtn.disabled = false;
-    transcribeBtn.textContent = "Transcribe " + selectedLabel;
+    transcribeBtn.textContent = "Transcribe " + displayName(selectedLabel);
   } else {
     transcribeBtn.disabled = true;
     transcribeBtn.textContent = "Select audio first";
@@ -361,7 +367,8 @@ function handleUpload(file) {
   selectedLabel = file.name;
   const url = URL.createObjectURL(file);
   audioPlayerEl.src = url;
-  nowPlayingLabelEl.textContent = file.name;
+  nowPlayingLabelEl.textContent = displayName(file.name);
+  nowPlayingLabelEl.title = file.name; // full name on hover
   nowPlayingEl.classList.add("visible");
   updateTranscribeButton();
 }
