@@ -249,9 +249,11 @@
 
 <script>
 // ---- Configuration ----
-// Set this to your deployed Render proxy URL, e.g. "https://parakeet-demo-api.onrender.com"
+// Deployed Render proxy (API) URL -- must match whatever URL your Web
+// Service actually gets on Render (visible at the top of its dashboard
+// page), which is NOT guaranteed to match the service's configured name.
 const API_BASE_URL = window.PARAKEET_API_BASE_URL
-  || (location.hostname === "localhost" ? "http://localhost:8091" : "https://parakeet-demo-api.onrender.com");
+  || (location.hostname === "localhost" ? "http://localhost:8091" : "https://automatic-speech-recognition-sxrr.onrender.com");
 
 const SAMPLES = [
   { id: "sample-1", file: "samples/sample-1-telemarketer-torture.wav", name: "Telemarketer Torture", meta: "86s · phone call" },
