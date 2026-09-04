@@ -1,0 +1,15 @@
+# Secrets -- never commit API keys
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+data/

@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parakeet Speech-to-Text Demo</title>
+<style>
+  :root {
+    --bg: #0b0d12;
+    --panel: #12151c;
+    --panel-border: #232733;
+    --text: #e8eaf0;
+    --text-dim: #9aa1b2;
+    --accent: #76b900; /* NVIDIA green */
+    --accent-dim: #5a8f00;
+    --danger: #ff5c5c;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 80px;
+  }
+  header { text-align: center; margin-bottom: 32px; max-width: 640px; }
+  header h1 { font-size: 1.8rem; margin: 0 0 8px; }
+  header p { color: var(--text-dim); margin: 0; line-height: 1.5; }
+  .badge {
+    display: inline-block;
+    background: rgba(118,185,0,0.15);
+    color: var(--accent);
+    border: 1px solid rgba(118,185,0,0.4);
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 14px;
+  }
+
+  main { width: 100%; max-width: 640px; display: flex; flex-direction: column; gap: 20px; }
+
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: var(--radius);
+    padding: 20px;
+  }
+  .panel h2 {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-dim);
+    margin: 0 0 14px;
+  }
+
+  .sample-list { display: flex; flex-direction: column; gap: 10px; }
+  .sample-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #171b24;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .sample-info { flex: 1; min-width: 0; }
+  .sample-name { font-size: 0.92rem; font-weight: 600; }
+  .sample-meta { font-size: 0.78rem; color: var(--text-dim); margin-top: 2px; }
+  .icon-btn {
+    background: transparent;
+    border: 1px solid var(--panel-border);
+    color: var(--text-dim);
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: border-color 0.15s, color 0.15s;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .use-btn {
+    background: var(--accent);
+    color: #0b0d12;
+    border: none;
+    border-radius: 6px;
+    padding: 7px 14px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .use-btn:hover { background: #8ad100; }
+  .use-btn:disabled { background: #3a3f4c; color: var(--text-dim); cursor: not-allowed; }
+
+  .dropzone {
+    border: 2px dashed var(--panel-border);
+    border-radius: 8px;
+    padding: 28px 16px;
+    text-align: center;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .dropzone:hover, .dropzone.dragover { border-color: var(--accent); background: rgba(118,185,0,0.05); }
+  .dropzone strong { color: var(--text); }
+  .dropzone input { display: none; }
+
+  .now-playing {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: #171b24;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+  }
+  .now-playing.visible { display: flex; }
+  .now-playing audio { flex: 1; min-width: 0; }
+  .now-playing .label { font-size: 0.85rem; font-weight: 600; white-space: nowrap; }
+
+  .transcribe-btn {
+    width: 100%;
+    background: var(--accent);
+    color: #0b0d12;
+    border: none;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .transcribe-btn:hover:not(:disabled) { background: #8ad100; }
+  .transcribe-btn:disabled { background: #3a3f4c; color: var(--text-dim); cursor: not-allowed; }
+
+  .status-line {
+    display: none;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+  }
+  .status-line.visible { display: flex; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--panel-border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box {
+    display: none;
+    background: rgba(255,92,92,0.1);
+    border: 1px solid rgba(255,92,92,0.4);
+    color: var(--danger);
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.88rem;
+  }
+  .error-box.visible { display: block; }
+
+  .result-box { display: none; }
+  .result-box.visible { display: block; }
+  .result-meta {
+    display: flex;
+    gap: 16px;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+  .transcript-text {
+    background: #171b24;
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 16px;
+    line-height: 1.65;
+    font-size: 0.95rem;
+    white-space: pre-wrap;
+  }
+
+  footer { margin-top: 40px; color: var(--text-dim); font-size: 0.78rem; text-align: center; }
+  footer a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">NVIDIA Parakeet-TDT 0.6B v2</div>
+  <h1>Speech-to-Text Demo</h1>
+  <p>Pick a sample below, or upload your own audio. We'll transcribe it using NVIDIA's hosted Parakeet ASR model.</p>
+</header>
+
+<main>
+  <section class="panel">
+    <h2>1. Choose audio</h2>
+    <div id="sampleList" class="sample-list"></div>
+
+    <div style="height:14px"></div>
+
+    <div id="dropzone" class="dropzone">
+      <div><strong>Click to upload</strong> or drag an audio file here</div>
+      <div style="font-size:0.78rem;margin-top:6px">Any common format &middot; 3 seconds to 5 minutes long</div>
+      <input type="file" id="fileInput" accept="audio/*">
+    </div>
+
+    <div style="height:14px"></div>
+
+    <div id="nowPlaying" class="now-playing">
+      <span class="label" id="nowPlayingLabel">Selected</span>
+      <audio id="audioPlayer" controls></audio>
+    </div>
+  </section>
+
+  <button id="transcribeBtn" class="transcribe-btn" disabled>Select audio first</button>
+
+  <div id="statusLine" class="status-line">
+    <div class="spinner"></div>
+    <span id="statusText">Transcribing&hellip;</span>
+  </div>
+
+  <div id="errorBox" class="error-box"></div>
+
+  <section id="resultBox" class="panel result-box">
+    <h2>Transcript</h2>
+    <div class="result-meta">
+      <span id="resultDuration"></span>
+      <span id="resultConfidence"></span>
+    </div>
+    <div id="transcriptText" class="transcript-text"></div>
+  </section>
+</main>
+
+<footer>
+  Powered by <a href="https://build.nvidia.com/nvidia/parakeet-tdt-0_6b-v2" target="_blank" rel="noopener">NVIDIA Parakeet-TDT 0.6B v2</a> &middot; audio never leaves this session except to be transcribed
+</footer>
+
+<script>
+// ---- Configuration ----
+// Set this to your deployed Render proxy URL, e.g. "https://parakeet-demo-api.onrender.com"
+const API_BASE_URL = window.PARAKEET_API_BASE_URL
+  || (location.hostname === "localhost" ? "http://localhost:8091" : "https://parakeet-demo-api.onrender.com");
+
+const SAMPLES = [
+  { id: "sample-1", file: "samples/sample-1-telemarketer-torture.wav", name: "Telemarketer Torture", meta: "86s · phone call" },
+  { id: "sample-2", file: "samples/sample-2-jack-vale-telemarketer.wav", name: "Jack Vale Prank Call", meta: "4m 55s · phone call" },
+  { id: "sample-3", file: "samples/sample-3-town-hall-clip-a.wav", name: "Town Hall Clip A", meta: "15s · public meeting" },
+  { id: "sample-4", file: "samples/sample-4-town-hall-clip-b.wav", name: "Town Hall Clip B", meta: "15s · public meeting" },
+];
+
+// ---- State ----
+let selectedBlob = null;   // File or Blob to send
+let selectedLabel = "";    // display name
+
+// ---- DOM refs ----
+const sampleListEl = document.getElementById("sampleList");
+const dropzoneEl = document.getElementById("dropzone");
+const fileInputEl = document.getElementById("fileInput");
+const nowPlayingEl = document.getElementById("nowPlaying");
+const nowPlayingLabelEl = document.getElementById("nowPlayingLabel");
+const audioPlayerEl = document.getElementById("audioPlayer");
+const transcribeBtn = document.getElementById("transcribeBtn");
+const statusLineEl = document.getElementById("statusLine");
+const statusTextEl = document.getElementById("statusText");
+const errorBoxEl = document.getElementById("errorBox");
+const resultBoxEl = document.getElementById("resultBox");
+const resultDurationEl = document.getElementById("resultDuration");
+const resultConfidenceEl = document.getElementById("resultConfidence");
+const transcriptTextEl = document.getElementById("transcriptText");
+
+// ---- Render sample list ----
+function renderSamples() {
+  sampleListEl.innerHTML = "";
+  SAMPLES.forEach((sample) => {
+    const row = document.createElement("div");
+    row.className = "sample-row";
+    row.innerHTML = `
+      <div class="sample-info">
+        <div class="sample-name">${sample.name}</div>
+        <div class="sample-meta">${sample.meta}</div>
+      </div>
+      <button class="icon-btn" title="Download" data-action="download">&#8681;</button>
+      <button class="use-btn" data-action="use">Use this</button>
+    `;
+    row.querySelector('[data-action="download"]').addEventListener("click", () => {
+      const a = document.createElement("a");
+      a.href = sample.file;
+      a.download = sample.file.split("/").pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    });
+    row.querySelector('[data-action="use"]').addEventListener("click", () => selectSample(sample));
+    sampleListEl.appendChild(row);
+  });
+}
+
+async function selectSample(sample) {
+  clearError();
+  hideResult();
+  setSelection(null, sample.name, sample.file);
+  try {
+    const resp = await fetch(sample.file);
+    const blob = await resp.blob();
+    selectedBlob = blob;
+    audioPlayerEl.src = sample.file;
+    nowPlayingLabelEl.textContent = sample.name;
+    nowPlayingEl.classList.add("visible");
+    updateTranscribeButton();
+  } catch (err) {
+    showError("Could not load that sample: " + err.message);
+  }
+}
+
+function setSelection(blob, label) {
+  selectedBlob = blob;
+  selectedLabel = label;
+}
+
+function updateTranscribeButton() {
+  if (selectedBlob) {
+    transcribeBtn.disabled = false;
+    transcribeBtn.textContent = "Transcribe " + selectedLabel;
+  } else {
+    transcribeBtn.disabled = true;
+    transcribeBtn.textContent = "Select audio first";
+  }
+}
+
+// ---- Upload handling ----
+dropzoneEl.addEventListener("click", () => fileInputEl.click());
+dropzoneEl.addEventListener("dragover", (e) => { e.preventDefault(); dropzoneEl.classList.add("dragover"); });
+dropzoneEl.addEventListener("dragleave", () => dropzoneEl.classList.remove("dragover"));
+dropzoneEl.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropzoneEl.classList.remove("dragover");
+  if (e.dataTransfer.files.length) handleUpload(e.dataTransfer.files[0]);
+});
+fileInputEl.addEventListener("change", () => {
+  if (fileInputEl.files.length) handleUpload(fileInputEl.files[0]);
+});
+
+function handleUpload(file) {
+  clearError();
+  hideResult();
+  selectedBlob = file;
+  selectedLabel = file.name;
+  const url = URL.createObjectURL(file);
+  audioPlayerEl.src = url;
+  nowPlayingLabelEl.textContent = file.name;
+  nowPlayingEl.classList.add("visible");
+  updateTranscribeButton();
+}
+
+// ---- Transcription ----
+transcribeBtn.addEventListener("click", async () => {
+  if (!selectedBlob) return;
+
+  clearError();
+  hideResult();
+  setLoading(true, "Uploading and transcribing… this can take a little while for longer clips.");
+
+  try {
+    const formData = new FormData();
+    formData.append("audio", selectedBlob, selectedLabel || "audio");
+
+    const resp = await fetch(`${API_BASE_URL}/api/transcribe`, {
+      method: "POST",
+      body: formData,
+    });
+    const data = await resp.json();
+
+    if (!resp.ok) {
+      throw new Error(data.error || `Server returned ${resp.status}`);
+    }
+
+    showResult(data);
+  } catch (err) {
+    showError(err.message || "Something went wrong while transcribing.");
+  } finally {
+    setLoading(false);
+  }
+});
+
+function setLoading(isLoading, message) {
+  transcribeBtn.disabled = isLoading;
+  statusLineEl.classList.toggle("visible", isLoading);
+  if (message) statusTextEl.textContent = message;
+}
+
+function showResult(data) {
+  resultDurationEl.textContent = `Duration: ${data.duration_seconds}s`;
+  const avgConfidence = data.segments && data.segments.length
+    ? (data.segments.reduce((sum, s) => sum + (s.confidence || 0), 0) / data.segments.length)
+    : null;
+  resultConfidenceEl.textContent = avgConfidence !== null
+    ? `Confidence: ${(avgConfidence * 100).toFixed(0)}%`
+    : "";
+  transcriptTextEl.textContent = data.text || "(no speech detected)";
+  resultBoxEl.classList.add("visible");
+}
+
+function hideResult() {
+  resultBoxEl.classList.remove("visible");
+}
+
+function showError(message) {
+  errorBoxEl.textContent = message;
+  errorBoxEl.classList.add("visible");
+}
+
+function clearError() {
+  errorBoxEl.classList.remove("visible");
+  errorBoxEl.textContent = "";
+}
+
+renderSamples();
+</script>
+
+</body>
+</html>

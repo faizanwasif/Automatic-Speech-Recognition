@@ -1,0 +1,20 @@
+services:
+  # Python proxy: browser upload -> ffmpeg convert -> gRPC call to NVIDIA Parakeet -> JSON
+  - type: web
+    name: parakeet-demo-api
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    dockerContext: ./server
+    plan: free
+    envVars:
+      - key: NVIDIA_API_KEY
+        sync: false   # set manually in the Render dashboard -- never committed to git
+    healthCheckPath: /health
+
+  # Static frontend: sample picker, upload, playback, results display
+  - type: web
+    name: parakeet-demo-site
+    runtime: static
+    staticPublishPath: ./public
+    plan: free
+    buildCommand: ""
