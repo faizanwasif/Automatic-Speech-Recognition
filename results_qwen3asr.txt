@@ -1,0 +1,505 @@
+====================================================================================================
+ASR TEST RESULTS  (model: Qwen/Qwen3-ASR-1.7B, local GPU inference, lang: auto-detect)
+====================================================================================================
+
+DATASET (fixed manifest -- same files used for every model/provider tested)
+----------------------------------------------------------------------------------------------------
+Manifest file: dataset_manifest.txt
+Files in this run: 24
+Total audio duration: 746.7s  (12.45 min)
+
+****************************************************************************************************
+  GLOBAL WER:   18.53%
+  GLOBAL RTFx:  15.86x
+****************************************************************************************************
+
+Normalizer: whisper EnglishTextNormalizer
+Timing: pure on-device inference time (model.transcribe() call only), 1 run(s)/file. One-time model-load cost excluded.
+NOTE: This is LOCAL GPU compute time, not hosted-API network latency --
+      the opposite measurement basis from the other results_*.txt files in this
+      repo. A higher RTFx here reflects real inference speed on this GPU
+      (RTX 3080 Ti Mobile, 16GB), not network/queueing conditions.
+
+CORPUS TOTALS (how the headline numbers are derived)
+----------------------------------------------------------------------------------------------------
+Global WER (micro-averaged, pooled S+I+D over pooled N): 18.53%  over 2029 reference words
+  (naive per-file mean would read 8.71% -- not used, it over-weights short clips)
+Global RTFx (pooled total audio / pooled total processing time): 15.86x  (746.7s audio / 47.1s processing)
+Samples scored: 24/24
+
+PER-SAMPLE (WER lower is better | RTFx higher is faster)
+----------------------------------------------------------------------------------------------------
+SAMPLE          WER     S     I     D      N   DUR(s)   PROC(s)     RTFx
+----------------------------------------------------------------------------------------------------
+s5            35.0%   102    51   120    781    331.2    20.76s   15.95x
+s1            11.4%    11     9     5    219     85.9     5.20s   16.52x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00048     6.2%     1     1     1     48     15.0     1.00s   15.02x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00064     9.1%     0     1     2     33     15.0     0.65s   23.04x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00068    10.5%     2     1     1     38     15.0     0.78s   19.12x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00092     8.3%     3     1     0     48     15.0     0.95s   15.78x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00216     8.5%     3     0     1     47     15.0     0.91s   16.53x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00235    14.3%     5     1     1     49     15.0     1.02s   14.78x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00010     2.4%     1     0     0     42     15.0     0.88s   16.99x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00038     9.1%     1     1     2     44     15.0     0.91s   16.49x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00075     2.3%     0     0     1     43     15.0     0.89s   16.91x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00091     2.1%     1     0     0     48     15.0     0.91s   16.38x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00112    14.0%     1     3     2     43     15.0     0.89s   16.80x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00114     2.6%     0     1     0     38     15.0     0.91s   16.49x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00135     2.3%     0     0     1     43     15.0     0.93s   16.10x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00176     5.9%     1     1     0     34     15.0     0.71s   21.13x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00190     3.8%     1     1     0     52     15.0     1.05s   14.30x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00195     2.3%     1     0     0     44     15.0     0.89s   16.75x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00196     7.0%     0     2     1     43     15.0     0.94s   15.91x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00206    17.0%     5     4     0     53     15.0     1.11s   13.48x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00226     5.5%     0     3     0     55     15.0     1.10s   13.67x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00231    12.1%     2     6     0     66     15.0     1.33s   11.27x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00248    14.0%     3     2     3     57     15.0     1.14s   13.11x
+Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00008     3.3%     1     0     1     61     15.0     1.23s   12.20x
+----------------------------------------------------------------------------------------------------
+
+
+####################################################################################################
+### SAMPLE: s5
+### AUDIO:      How to Stop Telemarketers From Calling! Jack Vale.wav  (331.2s)
+### REFERENCE:  Hand written.txt
+### LATENCIES:  20.76s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+Hello, hello. Hi, is this Jack? Yeah, what can he do for you here? Hi, my name is Sandra. Just to let you know this call may be recorded to ensure quality service.
+
+How are you today? Yeah, no, I'm fine, sweetheart. How are you doing? That's good to hear. I'm doing good. 
+
+Thank you for asking. Oh, nice. That's wonderful.
+
+Wonderful. Who is this now? Thank you. Mr. Jack, is it Valley? No, you're talking to Jack. 
+
+You're talking to Mr. Vale. V-A-L-E, Vale. Vale. 
+
+That's right. Sorry, I read that wrong. That's with a V. Mr. Vale. 
+
+That's with a V for victory. I'm calling. Or a lot of other things, of course, start with the letter V, but that's just with the example I've given. 
+
+This way, this way, this way, this way. Go ahead. I'm sorry. 
+
+Yeah, yeah. Go ahead. What's the reason for your call this morning? Do what now, exactly, now? You're going to do... You go ahead. 
+
+I'm sorry, honey. I think I'm speaking over you here. Is this where I go? Okay, you go ahead and I'll listen. 
+
+I'm sorry. You go on ahead there. Whatever the nature is here of the business, I'm all ears here.
+
+Of course, some people say I have large ears, but anyway, you go on ahead now. What's the reason for your call here? And I'll do my best to pay attention because I'm not... Can I have your confirmed zip code for me? oh yes absolutely All right. I'm sorry. 
+
+I'm Ubering. I did an Uber job when I take people around here. All right. 
+
+Have a nice day. All right. I love you too. 
+
+All right. That's very nice. You go on ahead there and I'll... You bet. 
+
+Can I have your confirmed zip code for me? Yeah, that would be, well, 37067. That's right. All right. 
+
+Thank you for that. Yeah. No, it's my pleasure, of course. 
+
+I do what I can and cooperate with different things. Now, I'm on my next ride here. What can I do for you, sweetheart? I'm in Franklin, Tennessee here is where I'm driving around here. 
+
+So if there's anything I can do to help you, I'm all ears, but I'm also driving around here. So it's a good time to talk. In other words, I'm happy to listen and talk and whatever you need, because I'm just driving anyways. 
+
+It usually takes me about five to 10 minutes to get to my next destination here. I just realized I'm probably talking to your ear off. I'm sorry.
+
+You're fine. Well, thank you. That's very nice of you. 
+
+I think you are too. Of course, I've never seen a picture of you, but I believe that would be the case. I'm 82 years old. 
+
+Can you believe that? Jack Vale, senior. Oh, are you trying to get a hold of my boy? Are you trying to get a hold of Jack Vale, the junior, my son? You may have gotten the wrong... I think I'm looking for you. Oh, all right. 
+
+Well, good. Okay. Have you got my birthday down there or what have you got? Is there anything that I can do to speed up the process here? Yes. 
+
+All right. Good. Whatever it is, I'm happy to do it. 
+
+I just have to do a little research. And this is Jack Vale, senior, now that you're talking to now. So if you need my boy, I can give you his phone number. 
+
+It's 714-916. You might want to get yourself a pencil here. 4-8-5-5. 
+
+There you go. And I'll let them know to expect a phone call from you here. Oh, I'm pulling up to my next my next Here we go.
+
+Oh, I'm at O'Berry Bush. I'm pulling up right here. Okay, good. 
+
+Are you there? I think maybe she hung up here on the telephone. Yeah, she did. I'll be done.
+
+Oh, I guess that... That gave me anxiety. Why did it give you anxiety? Every time she tries to speak and you just talk over her, it's like... Like you're always on the end of your seat. It's like, just let her speak.
+
+Dude, that's so much fun. I love what I do. I love what I do.
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=34.96%  (S=102, I=51, D=120, N=781)  |  Latency=20.76s  |  RTFx=15.95x
+
+Hello. Hello. Hi, Mr. Jack. Yeah. What What can he do for you here? Hi, my name is Sandra. Just for another call, number for just calling. How are you today? Yeah. No, I'm I'm fine, sweetheart. How are you doing? Just here. I'm doing good. Thank you for asking. All nice. Wonderful. Just wonderful. Who is this now? Uh, Mr. Jack. Um, is it Val? No, you're talking to Jack. You're talking to Mr. Vale. V A L E Vale. That's right. Yeah, right. It's with the V. Vale. It's with the V. Victor. I'm calling. All other things. Yeah, I'm calling. That's just what you have. Go, go ahead, Mr. Vale. Yeah. Go ahead. What's the reason for your call this morning? Do what now, today? Now we're gonna do. All right. Go, go ahead. You go ahead. I'm sorry, honey. I think I'm speaking over you here. Just where I go here. Okay. You go ahead. I'll listen. I'm sorry. You go on ahead there. Whatever the nature is here, the business. I'm all ears here. Of course, some people say I'm sorry to hear. Anyway, you go on ahead now. What's the reason for your call here? And I'll do my best. Oh, where can you get me? Because I'm not. Can I have your confirmation, confirm me? Oh yeah. So I'm just sitting here. Yeah. All right. I'm sorry. I'm. I had to become. I I'm Ubering. I did Uber job. When I take people around. Here, all right. Have a nice day. All right. I love you too. All right. It's very nice. Go. You go on ahead there. Now, you you bet. Can I have your confirmation, confirm me? Yeah, that would be. Well, three seven zero six seven. That's right. All right. Thank you. Yeah. No, it's my my pleasure. Of course. I do what I can and cooperate with different things. Now I'm on my next ride here. What can I do for you, sweetheart? Vale. I'm fully here. I'm fully here. I'm here. So there's anything I can do to help you. I'm all ears, but I'm also driving around here. So so it's good time to talk another way. I'll be listening to talk whatever you need because I'm. I'm just driving anyway. Usually takes me about five to ten minutes to get to my next destination. Here, I'm. I just realized I'm probably talking here. Here, I'm sorry. You're fine. All right. What then? You're very nice. I think you are too. Of course, I've never seen pictures of you, but I I believe that would be the case. I'm I'm 82 years old, can you believe that? Jack Vale, seen here. Oh, are you trying to get hold of my boy? Are you trying to get hold of you, Jack Vale? You're my son. You may have got the wrong. All right. Well, okay. You've got my birthday down there. What have you got? Is there anything that I can do to speed up the process here? Yes. All right. I'll whatever it is. I'm happy to do it. I just have to do a little research. Mr. Jack Vale, seen here now. To talk to now. So if you need my boy, I can give you his phone number. Yes. Um. It's one four. Nine one six. You might want to get yourself a pencil here. Four eight five five. There you go. So and I'll let him know to expect a phone call from you here. Oh, I'm pulling up to my next stop. Here we go. Can you hear me? Can you hear me? Confirm me. Oh, oh, very good. No, no, no. I'm pulling up right here. Okay, good. Are you there? I think maybe. Yeah. Yes. Yes. Why do you say every time you try speaking, you just talk over it like? Like you're always listening. That's so much fun. I love what I do. I love what I do.
+
+
+####################################################################################################
+### SAMPLE: s1
+### AUDIO:      How To Torture Telemarketers With One Word.wav  (85.9s)
+### REFERENCE:  s1_reference.txt
+### LATENCIES:  5.20s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+I see in your records that you've been having trouble with your credit, is that the case? Yes. Do you want to improve your credit score and get out of debt? Yes. Great, well then I can help do that. And how much debt would that be? Yes. Sure. Would that be over $20,000? Yes. Do you currently have a job? Yes. And in that job are you making over $35,000 per year? Yes. Fantastic. And are you a resident of New York state? Yes. Great. Perhaps you could just recite the last four digits of your Social Security number so I can make sure we have it in our records. Yes. Many people are not comfortable giving out their Social Security number, so perhaps you'd like to verify the number through a cell phone. Would that be all right? Yes. Well let me get you started then, it's 917-312- and the last four numbers are... Yes? If I was going to say "I need you to answer yes or no to the following questions." You are interested in our debt consolidation program? Yes. You are a resident of New York state? Yes. You're also a moron? Yes. Ah, good, just checking. I wanted to make sure that we had that on record. Yes!
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=11.42%  (S=11, I=9, D=5, N=219)  |  Latency=5.20s  |  RTFx=16.52x
+
+How to torment a telemarketer. Here to sashay in the records that you've been having trouble with your credit. Is that the case? Yes. Do you want to improve your credit score and get out of debt? Yes. Great. Well, only I can help you do that. And how much debt would that be? Yes. Sure. Would that be over twenty thousand dollars? Yes. Do you currently have a job? Yes. And in that job, you're making over thirty five thousand dollars a year. Yes. Fantastic. And are you a resident of New York State? Yes. Great. Perhaps you could just recite the last four digits of your social security number so I can make sure that we have it in our records. Yes. Many people are not comfortable giving out their social security number, so perhaps you'd like to verify the number through your cell phone. Would that be all right? Yes. Well, let me get you started. That is nine one seven three one two, and the last four numbers are. Yes. If I was going to say, I need you to answer yes to the following questions. You are interested in our debt consolidation program. Yes. You are a resident of New York State. Yes. You're also a moron. Yes. Ah, good. Just checking. You want to make sure that we have that on record. Yes.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00048
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00048.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00048.flac.txt
+### LATENCIES:  1.00s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+so we're going to switch to policy a little bit and we're going to have a separate question for each of you we have specific questions with each of you in mind our topic is the farm land zoning and affordable land trusts in other words
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=6.25%  (S=1, I=1, D=1, N=48)  |  Latency=1.00s  |  RTFx=15.02x
+
+So we're going to switch to policy a little bit, and we're going to have a separate question for each of you. We we have specific questions with each of you in mind. Our topic is the farmland zoning and affordable land trusts. In other words.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00064
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00064.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00064.flac.txt
+### LATENCIES:  0.65s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+of county and state government to be able to put aside those funds you know in just touching on the other questions i think i believe in order for us to change what
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=9.09%  (S=0, I=1, D=2, N=33)  |  Latency=0.65s  |  RTFx=23.04x
+
+County and state government to be able to put aside those funds. You know, in just touching on the other questions, I I believe in order for us to change what is
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00068
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00068.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00068.flac.txt
+### LATENCIES:  0.78s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+of that and i i very much honor and respect the expertise of those people who are experts when i was on the state land use commission i did vote against of very controversial development on awful because
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=10.53%  (S=2, I=1, D=1, N=38)  |  Latency=0.78s  |  RTFx=19.12x
+
+That and I, I very much honor and respect the expertise of those people who are our experts. When I was on the State Land Use Commission, I did vote against a very controversial development on Oahu because.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00092
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00092.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00092.flac.txt
+### LATENCIES:  0.95s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+there was such a high level of that that was proving to be connected to pesticides and runoff and things like that and so the party created a position saying that that need to stop that we need to be informed and that people need to know what
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=8.33%  (S=3, I=1, D=0, N=48)  |  Latency=0.95s  |  RTFx=15.78x
+
+There was such a high level of that that was proven to be connected to pesticides and runoff and things like that. And so the the party created a position saying that that needs to stop. That we need to be informed, and that people needed to know what.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00216
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00216.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00216.flac.txt
+### LATENCIES:  0.91s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+and they do have a history of working with that and so perhaps we can help people sense that there and have them come to us i mean it is very possible to have partnerships outside of the united states as we have in the past before
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=8.51%  (S=3, I=0, D=1, N=47)  |  Latency=0.91s  |  RTFx=16.53x
+
+And they do have a history of working with it, and so perhaps we can have people sent there and have them come to us. I mean, it is very possible to have partnerships outside of the United States, as we have in the past before.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00235
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00235.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00235.flac.txt
+### LATENCIES:  1.02s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+organic egg park do you have any idea what became a loose end do you think we should continue to pursue this concept in the next county budget session well i do think that we need to continue to proceed maybe not with that particular piece of property i
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=14.29%  (S=5, I=1, D=1, N=49)  |  Latency=1.02s  |  RTFx=14.78x
+
+Organic Ag Park. Do you have any idea what became of this, and do you think we should continue to pursue this concept in the next county budget session? Well, I do think that we need to continue to pursue it. Maybe not with that particular piece of property.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00010
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00010.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00010.flac.txt
+### LATENCIES:  0.88s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+has her own business in that respect so there's a lot of benefits to our economy that represents a family farm the multiplier effect we like to call it so outside of work workforce development we support agricultural land trust we
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.38%  (S=1, I=0, D=0, N=42)  |  Latency=0.88s  |  RTFx=16.99x
+
+Has her own business in that respect. So there's a lot of benefits to our economy that represents a family farm, the multiplier effect we like to call it. So outside of work, workforce development, we support agricultural land trusts. We
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00038
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00038.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00038.flac.txt
+### LATENCIES:  0.91s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+educate us as county council and as leaders throughout the state about the importance of that thank you thank you very much all of you thank you i don't know if we mention this this race actually has four people running but we
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=9.09%  (S=1, I=1, D=2, N=44)  |  Latency=0.91s  |  RTFx=16.49x
+
+Educate us as county council and as leaders throughout the state about the importance of of that. Thank you, thank you very much, all of you. I don't know if we mentioned this. This race actually has four people running, but we.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00075
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00075.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00075.flac.txt
+### LATENCIES:  0.89s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+been you know they've cut the streams off so the life cycles there have completely changed and there are farmers along the way we need to if our commitment is to diversify agriculture we're going to need to share that water
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.33%  (S=0, I=0, D=1, N=43)  |  Latency=0.89s  |  RTFx=16.91x
+
+You know, they've cut the streams off, so the life cycles there have completely changed. And there are farmers along the way. We need to, if our commitment is to diversify agriculture, we're going to need to share that water.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00091
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00091.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00091.flac.txt
+### LATENCIES:  0.91s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+part of the i sat on the resolutions committee for the democratic party last year or last convention two years ago and one of the big things that came up from koichi was that people children were being born with horrible birth defects you couldn't deny it
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.08%  (S=1, I=0, D=0, N=48)  |  Latency=0.91s  |  RTFx=16.38x
+
+Part of the I sat on the resolutions committee for the Democratic Party last year or last convention two years ago, and one of the big things that came up from Hawaii was that people children were being born with horrible birth defects. You couldn't deny it.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00112
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00112.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00112.flac.txt
+### LATENCIES:  0.89s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+the issue doesn't define a person and i think too often we see leadership today that we are allowing one issue to define people and as a wonderful community the community that has helped to raise me we cannot be a little
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=13.95%  (S=1, I=3, D=2, N=43)  |  Latency=0.89s  |  RTFx=16.80x
+
+The issue doesn't define a person, and I think too often we see in leadership today that we are allowing one issue to define people. And as a as a wonderful community, the community that has helped to raise me, we cannot belittle.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00114
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00114.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00114.flac.txt
+### LATENCIES:  0.91s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+studying anthropology of agriculture and and it's amazing in india we talk about water in india they have a water temple system and this is how they manage their water where the people who designate how that
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.63%  (S=0, I=1, D=0, N=38)  |  Latency=0.91s  |  RTFx=16.49x
+
+Studying anthropology of agriculture, and and it's amazing in India that we talk about water. In India, they have a water temple system, and this is how they manage their water, where the people who designate how that.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00135
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00135.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00135.flac.txt
+### LATENCIES:  0.93s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+founding fathers of the united states farm plan was straightforward we intend to not starve to death so we're going to make enough food to eat it is yellow my time's up or is it a warning i've got two
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.33%  (S=0, I=0, D=1, N=43)  |  Latency=0.93s  |  RTFx=16.10x
+
+Founding fathers of the United States farm plan was straightforward. We intend to not starve to death, so we're going to make enough food to eat. Is yellow my time's up, or is it a warning? I've got two.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00176
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00176.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00176.flac.txt
+### LATENCIES:  0.71s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+same question what would you propose for getting lower tax rates on agricultural lands were real farming and ranching is happening and part two to this question is that assuming you will be on
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=5.88%  (S=1, I=1, D=0, N=34)  |  Latency=0.71s  |  RTFx=21.13x
+
+Same question: What would you propose for getting lower tax rates on agricultural lands where real farming and ranching is happening? And part two to this question is that assuming you will be on the
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00190
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00190.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00190.flac.txt
+### LATENCIES:  1.05s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+because we seem to have this or members of the council seem to have this idea that that industry needs to be funded above all else and while that does bring money into our economy we cannot eat from it we can't we need to eat from our ajna and so
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=3.85%  (S=1, I=1, D=0, N=52)  |  Latency=1.05s  |  RTFx=14.30x
+
+Because we seem to have this, or members of the council seem to have this idea that that industry needs to be funded above all else, and while that does bring money into our economy, we cannot eat from it. We can't. We need to eat from our ina, and so I.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00195
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00195.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00195.flac.txt
+### LATENCIES:  0.89s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+enough food to last us out that week we definitely don't and furthermore those who are at a better economic advantage than others will end up getting that food there's no doubt about it you know supply drives and demand drives the
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=2.27%  (S=1, I=0, D=0, N=44)  |  Latency=0.89s  |  RTFx=16.75x
+
+Enough food to last us out the week. We definitely don't. And furthermore, those who are at a better economic advantage than others will end up getting that food. There's no doubt about it. You know, supply drives and demand drives the.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00196
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00196.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00196.flac.txt
+### LATENCIES:  0.94s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+market what we need to do and what i would like to do and hope is to support those small farmers those that are going to our farmers markets now and allow them the tech that they need the manpower the equipment whether
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=6.98%  (S=0, I=2, D=1, N=43)  |  Latency=0.94s  |  RTFx=15.91x
+
+What we need to do, and what I would like to do, and hope, is to support those small farmers, those that are going to our farmers' markets now, and allow them the the tech that they need, the manpower, the equipment, whether it.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00206
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00206.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00206.flac.txt
+### LATENCIES:  1.11s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+the drug dealing their drugs their medicines what are you going to call these things and the words we use to describe things that can be helpful to maintaining the health of our pets there's a little dog over there if you got him on heartworm preventative it's one of the
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=16.98%  (S=5, I=4, D=0, N=53)  |  Latency=1.11s  |  RTFx=13.48x
+
+I'm a drug dealer. They're drugs. They're medicines. What are you going to call these things? And the words we use to describe things that can be helpful to maintaining the health of our pets. There's a little dog over there. Have you got him on heartworm preventative? It's one of the
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00226
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00226.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00226.flac.txt
+### LATENCIES:  1.10s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+we've done a lot of agricultural demonstration biofuel crop demonstration over the last five years i've become very immersed in how to get those kinds of things funded at the state and federal level and i got expertise in a lot of the issues that have been talked about today so i'm
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=5.45%  (S=0, I=3, D=0, N=55)  |  Latency=1.10s  |  RTFx=13.67x
+
+We've done a lot of agricultural demonstration, biofuel crop demonstration over the last five years. I've become very immersed in how to get those kinds of things funded at the state and federal level, and I've got expertise in a lot of the issues that have been talked about today. So I'm a little.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00231
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00231.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00231.flac.txt
+### LATENCIES:  1.33s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+composting with my grandfather since i've been three or four he always had a big bucket near the boathouse where we put the fish stuff we put all the stuff we carved up for the vegetables in the garden then he made sure that he would mix it with a little bit of grass for we cut the lawn and we put it back in
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=12.12%  (S=2, I=6, D=0, N=66)  |  Latency=1.33s  |  RTFx=11.27x
+
+Composting with my grandfather since I've been three or four. He always had a big bucket near the boathouse where we'd put the fish stuff. We put all the stuff we'd carved up from the vegetables in the garden, and then he made sure that he would mix it with a little bit of grass from we cut from the lawn, and we'd put it back in the
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00248
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00248.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00248.flac.txt
+### LATENCIES:  1.14s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+concerns because there are several concerns about invasiveness about cross pollination and some other things like that so we need to get together and open up the discussion talk about those things as well as the benefits tiger who wants to grow the g a o is actually doing a survey right now to find out who
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=14.04%  (S=3, I=2, D=3, N=57)  |  Latency=1.14s  |  RTFx=13.11x
+
+Because there are some real concerns about invasiveness, about cross pollination, and some other things like that, so we need to get together and open up the discussion. Talk about those things as well as the benefits. Talk about who wants to grow. The DOA is actually doing a survey right now to find out who.
+
+
+####################################################################################################
+### SAMPLE: Audio-Team-English/07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00008
+### AUDIO:      07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00008.wav  (15.0s)
+### REFERENCE:  07282016HFUUforum_SLASH_07-28-2016_HFUUforum_DOT_mp3_00008.flac.txt
+### LATENCIES:  1.23s
+####################################################################################################
+
+--- REFERENCE (ground truth) ---
+at forty years old getting into farming didn't know what i was doing i was a gardener you know but i had the passion and that's what i still have today and that's what's can sustain our family farm along with my wife's passion and our son who works full time on the farm and our
+
+--- HYPOTHESIS (Qwen/Qwen3-ASR-1.7B) ---
+[METRICS] WER=3.28%  (S=1, I=0, D=1, N=61)  |  Latency=1.23s  |  RTFx=12.20x
+
+At forty years old, getting into farming, didn't know what I was doing. I was a gardener, you know, but I had the passion, and that's what I still have today. And that's what's sustained our family farm, along with my wife's passion and our son, who works full time on the farm, and our.
+
