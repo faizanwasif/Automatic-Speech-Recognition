@@ -15,9 +15,13 @@ audio dataset, plus a customer-facing demo app built on NVIDIA's Parakeet.
 ├── transcribe-3.5-google.py       Benchmark script: Gemini (gemini-3.5-transcribe)
 ├── transcribe-deepgram-nova3.py   Benchmark script: Deepgram (nova-3)
 ├── transcribe-assemblyai-u35pro.py Benchmark script: AssemblyAI (universal-3-5-pro)
+├── transcribe-qwen3-asr.py        Benchmark script: Qwen3-ASR-1.7B (LOCAL GPU, no API key)
 ├── results_gemini.txt             Output: WER / RTFx results, Gemini
 ├── results_deepgram.txt           Output: WER / RTFx results, Deepgram
 ├── results_assemblyai.txt         Output: WER / RTFx results, AssemblyAI
+├── results_qwen3asr.txt           Output: WER / RTFx results, Qwen3-ASR
+├── ON_DEVICE_SETUP.md             How the local-GPU (Qwen3-ASR) setup was built and
+│                                  debugged -- read this before running that script
 └── parakeet-demo/                 Standalone customer demo app (see its own README)
     ├── public/                    Static frontend (sample picker, upload, playback)
     ├── server/                    Flask proxy -> NVIDIA Parakeet gRPC API
@@ -43,11 +47,18 @@ self-contained; see the top-of-file comments for setup and required env vars
 
 ### Results summary (24-file / 12.45-min manifest)
 
-| Provider | Model | Global WER | Global RTFx |
-|---|---|---|---|
-| AssemblyAI | universal-3-5-pro | 10.40% | 2.74x |
-| Deepgram | nova-3 | 11.98% | 6.18x |
-| Gemini | gemini-3.5-transcribe | 15.23% | 5.53x |
+| Provider | Model | Global WER | Global RTFx | Runs |
+|---|---|---|---|---|
+| AssemblyAI | universal-3-5-pro | 10.40% | 2.74x | hosted API |
+| Deepgram | nova-3 | 11.98% | 6.18x | hosted API |
+| Qwen3-ASR | 1.7B | 18.53% | 15.86x | local GPU |
+| Gemini | gemini-3.5-transcribe | 15.23% | 5.53x | hosted API |
+
+Qwen3-ASR's RTFx is not directly comparable to the others: it measures pure
+on-device inference time (no network round-trip), while the hosted APIs'
+RTFx includes network + queueing latency. See `ON_DEVICE_SETUP.md` for how
+that benchmark was set up (GPU driver/cuDNN issues hit and fixed along the
+way, plus a silent-truncation bug worth knowing about if you replicate it).
 
 Full per-file breakdowns and transcripts are in each `results_*.txt` file.
 
@@ -64,7 +75,12 @@ history kept for reference alongside it.
 
 ## Setup
 
+Hosted-API scripts (Gemini, Deepgram, AssemblyAI):
 ```bash
 cp .env.example .env   # fill in your own API keys
 pip install google-genai python-dotenv jiwer deepgram-sdk assemblyai openai-whisper
 ```
+
+Local-GPU script (Qwen3-ASR) needs no API key but a CUDA GPU and some
+version-pinning care — see [`ON_DEVICE_SETUP.md`](ON_DEVICE_SETUP.md) before
+running `transcribe-qwen3-asr.py`.
