@@ -212,6 +212,93 @@ short-clip example. If you see suspiciously high WER concentrated on your
 longest files specifically, check hypothesis length against reference length
 before assuming it's a model-quality problem.
 
+## 7. How WER and RTFx are calculated, and how the report is built
+
+This section documents the scoring/reporting pipeline in
+`transcribe-qwen3-asr.py` (`score_transcript()`, `aggregate()`,
+`write_results()`) — it's identical in shape to the same functions in the
+other three `transcribe-*.py` scripts in this repo, by design, so results
+are comparable across providers and not just internally consistent.
+
+### WER (Word Error Rate)
+
+Both reference and hypothesis text are run through `normalize()` first
+(Whisper's `EnglishTextNormalizer`) — lowercasing, contraction expansion,
+spelled-out numbers converted to digits, punctuation stripped — so
+formatting differences aren't counted as transcription errors. Then:
+
+```python
+measures = jiwer.process_words(ref_norm, hyp_norm)
+s, i, d = measures.substitutions, measures.insertions, measures.deletions
+wer = measures.wer
+```
+
+`jiwer` performs word-level edit-distance alignment between the two texts.
+`wer = (S + I + D) / N`, where `N` is the reference word count — the
+standard WER formula.
+
+### RTFx (Real-Time Factor)
+
+```python
+rtfx = audio_duration_s / processing_time_s
+```
+
+Higher is faster than real-time (e.g. a 15-second clip processed in 3
+seconds → RTFx 5x). For this script specifically, `processing_time_s` is
+**pure on-device inference time** — only the `model.transcribe()` call,
+timed with `time.monotonic()`, with one-time model loading excluded. This
+is a different basis than the hosted-API scripts in this repo, which time
+network round-trip instead of local compute — the report file notes this
+explicitly so the two aren't compared as if they were the same
+measurement.
+
+### Corpus-level aggregation (the headline numbers)
+
+The report's "Global WER" and "Global RTFx" are **not** an average of each
+file's own WER/RTFx. They're computed by pooling raw counts across every
+file first, then dividing once:
+
+```python
+total_n     = sum(s["ref_word_count"] for s in scored)
+total_err   = sum(s["substitutions"] + s["insertions"] + s["deletions"] for s in scored)
+micro_wer   = total_err / total_n            # -> "Global WER"
+
+total_audio = sum(s["audio_duration_s"] for s in scored)
+total_proc  = sum(s["processing_time_s"] for s in scored)
+overall_rtfx = total_audio / total_proc       # -> "Global RTFx"
+```
+
+This is **micro-averaging**: every word across the whole dataset counts
+once, as if all 24 files were one concatenated transcript. The alternative
+— averaging each file's own WER% (**macro-averaging**) — is also computed
+(`macro_wer`) and shown in the report for comparison, but is deliberately
+*not* used as the headline. Macro-averaging over-weights short clips: a
+15-second file with 1 error in 10 words (10% WER) would count exactly as
+much as a 331-second file with 100 errors in 800 words (12.5% WER),
+despite the long file containing 80x more actual speech. Micro-averaging
+weights every word equally regardless of which file it came from, which is
+what a single "how accurate is this system on this dataset" number should
+reflect.
+
+### How `write_results()` assembles the report file
+
+One plain-text file, four sections in order:
+
+1. **Headline block** — Global WER / Global RTFx in a bordered box, plus a
+   one-line note on what RTFx is measuring (on-device vs. network).
+2. **Corpus totals** — the same two numbers spelled out with their raw
+   inputs (total errors, total reference words, total audio/processing
+   seconds), plus the macro-average shown alongside so it's clear *why*
+   the headline differs from a naive per-file average.
+3. **Per-sample table** — one row per file: WER%, S/I/D counts, N,
+   duration, processing time, RTFx.
+4. **Full transcripts** — reference and hypothesis text printed side by
+   side per file, so any number in the table above can be manually spot-
+   checked against the actual text (this is what surfaced the
+   `max_new_tokens` truncation bug in section 6 — the aggregate numbers
+   alone wouldn't have shown *why* two files scored badly, only that they
+   did).
+
 ## Summary: known-good install sequence
 
 ```bash
